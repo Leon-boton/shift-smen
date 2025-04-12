@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+  <title>Мои задачи</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="work.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+.fab-container.active .fab-option:nth-child(2) {
+  transform: translate(-30px, 70px); /* Влево вверх */
+  opacity: 1;
+  pointer-events: auto;
+}
+.fab-container.active .fab-option:nth-child(3) {
+  transform: translate(50px, -10px); /* Правильное указание px */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fab-container.active .fab-option:nth-child(4) {
+  transform: translate(-10px, 10px); /* Вправо вверх */
+  opacity: 1;
+  pointer-events: auto;
+}
+</style>
+<script>
+const groupId = localStorage.getItem("currentGroupId");
+if (!groupId) {
+  alert("Группа не выбрана");
+  window.location.href = "workk.html";
+}
+</script>
+</head>
+
+<body>
+
+
+<!--  поисковая  -->
+<div class="floating-search" id="floatingSearch">
+  <input type="text" id="taskSearchInput" placeholder="Поиск..." />
+  <button id="toggleSearch"><i class="fas fa-search"></i></button>
+</div>
+
+</div>
+<!-- задачи список-->
+  <div id="taskList" class="task-list"></div>
+
+<!--<button class="add-task-btn" onclick="openTaskModal()" style="display: none;"></button>-->
+
+  <div id="taskModal" class="modal hidden">
+    <div class="modal-content ios-style">
+      <div class="modal-header">
+        <h2>Новая задача</h2>
+        <span class="close-btn" onclick="closeTaskModal()">×</span>
+      </div>
+      <input type="text" id="taskTitle" placeholder="Название" />
+      <textarea id="taskDesc" placeholder="Описание"></textarea>
+<div id="imagePreviewContainer" class="image-preview-container"></div>
+     
+<div id="taskImagePreview" style="display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0;"></div>
+ <input type="file" id="taskImage" multiple />
+      <button onclick="saveTask()">Сохранить</button>
+    <!--  <button onclick="closeTaskModal()" class="cancel-btn">Отмена</button>-->
+    </div>
+  </div>
+
+<!-- недавные уд  -->
+<div id="deletedModal" class="modal" style="display: none;">
+  <div class="modal-content" style="position: relative;">
+    <span class="close" onclick="closeDeletedModal()">&times;</span>
+    <h3>Недавно удалённые</h3>
+    <!-- Старая кнопка удалена -->
+    <div id="deletedList" style="max-height: 300px; overflow-y: auto;"></div>
+
+    <!-- Новая иконка-кнопка корзины -->
+    <div id="trashIconBtn" onclick="clearDeletedTasks()" style="
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-size: 20px;
+      color: white;
+    ">
+      <i class="fas fa-trash"></i>
+    </div>
+
+  </div>
+</div>
+
+ <div class="fab-container" id="fabContainer">
+  <button class="fab-btn" id="mainFab">×</button>
+  <button class="fab-option" onclick="goBack()">←</button>
+  <button class="fab-option" onclick="openTaskModal()">+</button>
+  <button class="fab-option" onclick="showRecentlyDeleted()">
+<i class="fas fa-trash-restore"></i>
+</button>
+</div>
+
+<script>
+document.getElementById("mainFab").addEventListener("click", () => {
+  document.getElementById("fabContainer").classList.toggle("active");
+});
+</script>
+<script>
+  function goBack() {
+    history.back();
+  }
+</script>
+  <script src="work.js" defer></script>
+
+
+<!--   -->
+<div id="taskPreviewSheet" class="bottom-sheet">
+  <div class="sheet-content ios-style">
+    <div class="sheet-header">
+  <div class="sheet-handle"></div>
+  <button class="close-sheet-btn" onclick="closeBottomSheet()">&times;</button>
+</div>
+    <div class="sheet-body">
+      <h3 id="previewTitle"></h3>
+      <p id="previewDesc"></p>
+      <img id="previewImg" src="" style="max-width: 100%; border-radius: 10px; margin-top: 10px; display: none;" />
+<div id="previewAllImages" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;"></div>
+    </div>
+    <div class="sheet-actions">
+      <button onclick="editCurrentTask()">Редактировать</button>
+       <button id="deleteTaskFromSheet">Удалить</button>
+    </div>
+  </div>
+</div>
+
+ 
+<div id="imageViewer" onclick="closeImageViewer()" style="display: none;">
+  <img id="imageViewerImg" onclick="closeImageViewer()" />
+</div>
+
+<!-- логика списка  -->
+<script>
+let currentGroupId = null;
+
+function loadGroups() {
+  const groupList = document.getElementById("groupList");
+  const groups = JSON.parse(localStorage.getItem("taskGroups") || "[]");
+  groupList.innerHTML = "";
+
+  groups.forEach(group => {
+    const div = document.createElement("div");
+    div.className = "group-item";
+    div.innerHTML = `
+      <div onclick="openGroup('${group.id}', '${group.name}')">${group.name}</div>
+      <button onclick="deleteGroup('${group.id}')">🗑</button>
+    `;
+    groupList.appendChild(div);
+  });
+}
+
+function createGroup() {
+  const name = prompt("Название списка:");
+  if (!name) return;
+  const groups = JSON.parse(localStorage.getItem("taskGroups") || "[]");
+  const id = "group_" + Date.now();
+  groups.push({ id, name });
+  localStorage.setItem("taskGroups", JSON.stringify(groups));
+  loadGroups();
+}
+
+function deleteGroup(id) {
+  if (!confirm("Удалить список?")) return;
+  const groups = JSON.parse(localStorage.getItem("taskGroups") || "[]");
+  localStorage.setItem("taskGroups", JSON.stringify(groups.filter(g => g.id !== id)));
+  localStorage.removeItem("tasks_" + id);
+  loadGroups();
+}
+
+function openGroup(id, name) {
+  currentGroupId = id;
+  document.getElementById("groupSection").style.display = "none";
+  document.getElementById("taskSection").style.display = "block";
+  document.getElementById("groupTitle").textContent = name;
+  renderTasks();
+}
+
+function backToGroups() {
+  currentGroupId = null;
+  document.getElementById("groupSection").style.display = "block";
+  document.getElementById("taskSection").style.display = "none";
+}
+</script>
+
+<!--  логи
+<div id="devLog" style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  background: #111;
+  color: #0f0;
+  font-family: monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-top: 2px solid #0f0;
+  z-index: 9999;
+"></div>-->
+</body>
+</html>
