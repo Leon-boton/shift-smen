@@ -8,8 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const salaryResult = document.getElementById("salaryResult");
 
     calcBtn.addEventListener("click", () => {
-        salaryModal.style.display = "flex";
-    });
+    salaryModal.style.display = "flex";
+    setTimeout(() => {
+        document.getElementById("salaryRate").focus();
+    }, 300); // ← задержка, чтобы модалка точно отобразилась
+});
 
     closeModal.addEventListener("click", () => {
         salaryModal.style.display = "none";
