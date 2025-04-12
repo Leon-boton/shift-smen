@@ -1,3 +1,9 @@
+
+body {
+  background-color: #000;
+  color: #fff;
+  padding-top: env(safe-area-inset-top); /* для iOS-чёлки */
+}
 /* стиль для списка */
 .group-item {
   background: #1c1c1e;
