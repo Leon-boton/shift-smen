@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#000000">
+
+    <title>Календарь</title>
+
+<link rel="icon" href="icon/icons1.png" type="image/png">
+<link rel="apple-touch-icon" href="icon/icons.png">
+
+    <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="manifest" href="manifest.json">
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<!-- Боковое меню -->
+<div class="sidebar" id="sidebar">
+    <ul>
+<!-- погода  -->
+<div class="weather-widget" id="weatherWidget">
+  <div class="weather-temp" id="weatherTemp">+12°</div>
+  <div class="weather-desc" id="weatherDesc">Ясно</div>
+  <div class="weather-city" id="weatherCity">Бийск</div>
+</div>
+<!-- узнать кто в смене --> 
+<li id="whoInShiftBtn"><i class="fas fa-user-clock"></i> Кто в смене</li>
+
+        <li id="newShiftBtn"><i class="fas fa-calendar-plus"></i> Новая смена</li>
+<li id="openShiftList"><i class="fas fa-list"></i> Список смен</li>
+<li id="calcSalaryBtn"><i class="fas fa-ruble-sign"></i> Расчёт ЗП</li>
+<li id="uploadScheduleBtn"><i class="fas fa-upload"></i> Загрузить график</li>
+<li onclick="window.location.href='work.html'">
+  <i class="fas fa-briefcase"></i>Заметки
+</li>
+<li id="openArchiveModal"><i class="fas fa-folder-open"></i> Архив смен</li>
+
+<!-- карзина  -->
+<li id="openDebugShifts" 
+    style="position: absolute; bottom: 20px; right: 10px; background: none; border: none; padding: 0; margin: 0; cursor: pointer;" 
+    title="Все смены (debug)">
+  <i class="fas fa-trash-alt" style="font-size: 20px; color: white;"></i>
+</li>
+<!-- Чат  -->
+<!-- Кнопка: Чат -->
+<li onclick="toggleChat()"
+    style="position: absolute; bottom: 20px; right: 40px; background: none; border: none; padding: 0; margin: 0; cursor: pointer;"
+    title="Открыть чат">
+  <i class="fas fa-comment" style="font-size: 20px; color: white;"></i>
+</li>
+
+<!-- поиск  -->
+
+<div class="search-shift-box">
+  <i class="fas fa-search"></i>
+  <input type="date" id="shiftSearchInput" placeholder="Введите дату" />
+</div>
+<div id="shiftSearchResult" class="search-result-box"></div>
+
+   </ul>
+    <!--div id="logBox" style="margin-top: 30px; font-size: 12px; color: #ccc; max-height: 200px; overflow-y: auto;"></div>-->
+</div>
+<!-- Кнопка-гамбургер -->
+<div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+
+<!-- Чат на главном -->
+
+<li onclick="toggleChat()" style="list-style: none; position: absolute; bottom: 70px; right: 20px; background: none; border: none; padding: 0; margin: 0; cursor: pointer;" title="Открыть чат">
+  <i class="fas fa-comment" style="font-size: 30px; color: white;"></i>
+</li>
+
+<!-- счетчик смен   -->
+
+  <div class="monthly-stats ios-style" id="statsBox">
+    <div class="stat-item">
+      <div class="stat-label">Смен</div>
+      <div class="stat-value" id="totalShifts">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">Часов</div>
+      <div class="stat-value" id="totalHours">0 </div>
+    </div>
+  </div>
+<!-- календарь   -->
+    <div class="calendar">
+        <div class="calendar-header">
+            <h2 id="monthYear"></h2>
+            <div class="calendar-nav">
+                <span id="prevMonth" class="arrow">&#8592;</span>
+                <span id="nextMonth" class="arrow">&#8594;</span>
+            </div>
+        </div>
+        <div class="calendar-days">
+<div>Пн</div>
+<div>Вт</div>
+<div>Ср</div>
+<div>Чт</div>
+<div>Пт</div>
+<div class="weekend">Сб</div><div class="weekend">Вс</div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+</div>
+    </div>
+<!-- ВИДЖЕТ: СЛЕДУЮЩАЯ СМЕНА -->
+<div id="nextShiftWidget" class="next-shift-widget">
+  <div class="widget-title">Следующая смена</div>
+  <div class="widget-body">
+    <div id="nextShiftDate" class="widget-date">—</div>
+    <div id="nextShiftType" class="widget-type">—</div>
+  </div>
+</div>
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modal-date"></h3>
+           <label for="shiftTypeSelect">Тип смены:</label>
+<select id="shiftTypeSelect">
+  <option value="day">День (07:00)</option>
+  <option value="night">Ночь (19:00)</option>
+</select>
+            <div class="modal-buttons">
+                <button id="saveEvent">Сохранить</button>
+                <button id="deleteEvent">Удалить</button>
+            </div>
+        </div>
+</div>
+
+<!-- Модалка для смены -->
+<div id="shiftModal" class="modal">
+    <div class="modal-content">
+        <h3>Создать смену</h3>
+<span class="close" id="closeShiftModal">&times;</span>
+
+        <label for="shiftType">Тип смены:</label>
+        <select id="shiftType">
+            <option value="day">День</option>
+            <option value="night">Ночь</option>
+        </select>
+
+        <label for="shiftDate">Дата смены:</label>
+        <input type="date" id="shiftDate">
+
+        <p id="shiftInfo"></p>
+        <div class="modal-buttons">
+            <button id="saveShift">Сохранить</button>
+        </div>
+    </div>
+</div>
+<!-- СПИСОК  -->
+<div id="shiftListModal" class="modal">
+  <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+    <h3>Смены <span id="shiftCount" style="font-size: 14px; color: #ccc;"></span></h3>
+<span class="close" id="closeShiftList">&times;</span>
+    <div id="shiftList"></div>
+    <div class="modal-buttons">
+     
+    </div>
+  </div>
+</div>
+<!-- зп  -->
+<div id="salaryModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSalaryModal">&times;</span>
+    <h3>Расчёт зарплаты</h3>
+
+    <label for="salaryRate">Ставка (₽/час):</label>
+    <input type="number" id="salaryRate" placeholder="например, 120">
+
+    <label for="salaryMonth">Месяц:</label>
+    <input type="month" id="salaryMonth">
+
+    <div class="modal-buttons">
+      <button id="calcSalary">Рассчитать</button>
+    </div>
+
+    <div id="salaryResult" style="margin-top: 15px; font-size: 14px;"></div>
+  </div>
+</div>
+</div>
+<!-- загрузка .ods  -->
+<div id="scheduleImportModal" class="modal">
+<div class="modal-content">
+    <span class="close" id="closeImportModal">&times;</span>
+    <h3>Импорт смен из графика</h3>
+    <input type="file" id="scheduleFileInput" accept=".ods,.xlsx,.xls" />
+    <label for="fioSelect">Выберите сотрудника:</label>
+    <select id="fioSelect"></select>
+    <button id="importShifts">Импортировать смены</button>
+  </div>
+</div>
+</div>
+
+<div id="debugShiftsModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <!-- Крестик закрытия -->
+    <span class="close" id="closeDebugShiftsModal">&times;</span>
+
+    <!-- Заголовок -->
+    <h3 style="margin-top: 0;">Все смены (из localStorage)</h3>
+
+    <!-- Список смен -->
+    <div id="debugShiftsList" style="max-height: 300px; overflow-y: auto; font-size: 14px;"></div>
+
+    <!-- Корзина внизу справа -->
+    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+      <button id="clearShiftsBtn" title="Удалить все смены" style="
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      " onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="fas fa-trash" style="color: white; font-size: 20px;"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- архив смен  -->
+<div id="archiveModal" class="modal">
+  <div class="modal-content archive-content">
+    <span class="close" id="closeArchiveModal">&times;</span>
+    <h3>Архив смен</h3>
+    <select id="archiveMonthSelect"></select>
+    <div id="archiveShiftList" style="margin-top: 10px;"></div>
+  </div>
+</div>
+
+<!-- Модальное окно: Кто в смене -->
+<div id="whoInShiftModal" class="modal">
+  <div class="modal-content">
+
+    <!-- Заголовок и крестик закрытия -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0;">Кто в смене?</h3>
+      <span class="close" id="closeWhoInShift" style="font-size: 20px; cursor: pointer;">&times;</span>
+    </div>
+
+    <!-- Дата и загрузка графика -->
+    <input type="date" id="shiftQueryDate" style="margin-top: 10px;">
+    <input type="file" id="shiftFileInput" accept=".ods" style="margin-top: 10px;">
+
+    <!-- Селектор месяца -->
+    <label for="monthSelector" style="margin-top: 10px; display: block;">Месяц:</label>
+    <select id="monthSelector" style="margin-bottom: 10px;"></select>
+
+    <!-- Результат смены -->
+    <div id="shiftResults" style="margin-top: 15px; font-size: 14px;"></div>
+
+    <!-- Корзина внизу справа -->
+    <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+      <button id="clearShiftGraphsBtn" title="Удалить графики" style="
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      " onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+        <i class="fas fa-trash" style="color: white; font-size: 20px;"></i>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- чат  -->
+<div id="chatModal" class="chat-modal">
+  <div class="chat-wrapper">
+    <button class="chat-close" onclick="toggleChat()">×</button>
+
+    <div class="room-select">
+      <label for="room">Комната:</label>
+      <select id="room">
+        <option value="general">Общий Чат</option>
+        <option value="work">Проблемы</option>
+        <option value="offtopic">Пересменка</option>
+      </select>
+    </div>
+
+    <!-- заменили ul на div -->
+    <div id="messages" style="flex: 1; overflow-y: auto; padding: 0 8px; margin: 0;"></div>
+
+    <div class="input-area">
+      <input id="m" autocomplete="off" placeholder="Сообщение..." />
+      <button onclick="send()">Отправить</button>
+    </div>
+  </div>
+</div>
+
+<!--   -->
+
+<script src="script.js"></script>
+<script src="smena.js"></script>
+<script src="calcSalary.js"></script>
+<script src="chat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="uploadSchedule.js"></script>
+<script>if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').then(() => {
+      console.log("Service Worker активен");
+    });
+  }
+</script>
+
+</body>
+</html>

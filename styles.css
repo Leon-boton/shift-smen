@@ -1,0 +1,960 @@
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  color: white;
+  font-size: 16px;
+}
+.actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+}
+
+.icon-btn:hover svg {
+  stroke: white;
+}
+
+
+
+
+
+#chatModal input,
+#chatModal button {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%; /* запрет на авто-зум */
+}
+
+.chat-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: flex-end; /* снизу */
+}
+
+.chat-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 90%;
+  max-width: 380px;
+  height: 70vh;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.2); /* тёмное стекло */
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-left: auto;
+  margin-right: auto;
+  overflow-y: auto; /* заменяем hidden */
+  overflow-x: hidden;
+}
+
+.chat-wrapper {
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.chat-modal.show .chat-wrapper {
+  transform: translateY(0);
+}
+
+
+.chat-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  background: #007aff;
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.room-select {
+  margin-top: 32px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+select {
+  background: #1c1c1e;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-right: 4px;
+display: flex;
+  flex-direction: column;
+}
+#messages li {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  background: #1c1c1e;
+  color: white;
+  border-radius: 12px;
+  padding: 6px 10px;          /* уменьшил отступы */
+  margin-bottom: 8px;         /* немного меньше промежутка между сообщениями */
+  max-width: 70%;             /* уже не занимает всю ширину */
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-size: 13px;            /* слегка уменьшенный шрифт */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  align-self: flex-start;
+}
+
+.message.own {
+  background: rgba(0, 122, 255, 0.15);
+  align-self: flex-end;
+}
+
+.msg-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;                 /* уменьшаем промежуток между элементами */
+  font-size: 12px;          /* чуть меньше шрифт для шапки */
+  margin-bottom: 2px;       /* меньше промежутка между шапкой и текстом */
+}
+
+.dot {
+  width: 6px;               /* уменьшаем точку */
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.msg-text {
+  font-size: 13px;
+  line-height: 1.3;         /* немного плотнее строки */
+}
+
+.time {
+  font-size: 11px;          /* уменьшаем шрифт времени */
+  color: #aaa;
+  margin-top: 4px;          /* чуть меньше отступ сверху */
+}
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+#chatModal input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 15px;
+  border: none;
+  background: #1c1c1e;
+  color: #fff;
+}
+#chatModal button {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 14px;
+}
+
+/* стоп */
+#salaryModal .modal-content {
+  max-height: 90vh;        /* Ограничиваем по высоте экрана */
+  overflow-y: auto;        /* Включаем вертикальную прокрутку */
+}
+
+.modal-buttons button {
+  width: auto;
+  min-width: 140px;
+  max-width: 200px;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.modal-buttons button:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
+/* Когда меню открыто — смещаем виджет вправо */
+.sidebar.active ~ #nextShiftWidget {
+  transform: translateX(calc(-650% + 140px));
+}
+/* след смена */
+.next-shift-widget {
+  position: fixed;
+  top: 550px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  padding: 12px 20px;
+  border-radius: 16px;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 999;
+  text-align: center;
+  min-width: 200px;
+}
+
+.widget-title {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.widget-body {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.widget-date {
+  font-size: 15px;
+}
+
+.widget-type {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+#debugShiftsList div {
+  margin: 4px 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+
+#debugShiftsList .day {
+  border-left: 4px solid #00caff;
+}
+#debugShiftsList .night {
+  border-left: 4px solid #b96fff;
+}
+#debugShiftsBtn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    padding: 10px;
+    border-radius: 12px;
+    background: #007aff;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  background: url('background.jpeg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
+
+/* Тёмная дымка поверх фона */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 1.10); /* прозрачный чёрный фон */
+  z-index: -1;
+}
+.calendar {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* для Safari */
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: background 0.3s ease;
+}
+/*.calendar {
+    width: 320px;
+    background: #181824;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    color: white;
+}*/
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.arrow {
+    cursor: pointer;
+    font-size: 20px;
+    color: #00e1ff;
+    transition: transform 0.3s ease;
+}
+
+.arrow:hover {
+    transform: scale(1.2);
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 колонок */
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.weekend {
+    color: red;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-grid div {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    transition: background 0.3s ease;
+}
+
+.calendar-grid div.has-event {
+    background: #00e1ff;
+    color: black;
+    font-weight: bold;
+}
+.calendar-days div {
+  text-align: center;
+  width: 100%;
+}
+
+.today {
+    background: red;
+    color: white;
+    font-weight: bold;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  width: 90%;
+  max-width: 420px;
+  margin: auto;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  color: white;
+  position: relative;
+}
+
+/* Крестик */
+.modal-content .close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Поля ввода */
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.07);
+  color: white;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.modal-content label {
+  font-size: 15px;
+  opacity: 0.8;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background: #007aff;
+  color: white;
+  transition: background 0.2s ease;
+}
+
+
+.modal-buttons button:hover {
+  background: #005bb5;
+}
+
+.modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #E5E5EA;
+}
+
+.modal-buttons button,
+.modal-content button.save-btn {
+  background: white !important;
+  color: #111;
+  font-weight: 600;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: 100%;
+}
+
+.modal-buttons button:hover,
+.modal-content button.save-btn:hover {
+  background: #f0f0f0 !important;
+}
+
+button.save-btn {
+  color: #000 !important;
+}
+.modal-buttons button {
+  color: #000 !important;
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#deleteEvent {
+    background: red;
+    color: white;
+}
+
+.gray {
+    color: #555;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* Кнопка-гамбургер */
+.hamburger {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+    width: 30px;
+    height: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: transparent;
+    cursor: pointer;
+}
+.hamburger span {
+    height: 4px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Анимация превращения в крестик */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Сайдбар */
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: -350px;
+    width: 220px;
+    height: 100%;
+    background: rgba(28, 28, 30, 0.9);
+    padding: 5px 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s ease;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+}
+.sidebar {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px); /* для Safari */
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+.sidebar {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    color: white;
+}
+.sidebar ul {
+    margin-top: 30px; /* Подними ниже */
+}
+.sidebar ul li {
+    margin: 20px 0;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Сайдбар активен */
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+}
+
+.sidebar ul li .icon {
+    flex-shrink: 0;
+    stroke: white;
+    width: 20px;
+    height: 20px;
+}
+/* тут нах */
+.sidebar ul li {
+    margin: 20px 0;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+
+    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.06); /* лёгкая подложка */
+    border-radius: 12px;
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); /* мягкая тень */
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.sidebar ul li:hover {
+    background: rgba(255, 255, 255, 0.12); /* подсветка при наведении */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-buttons button {
+    background: linear-gradient(to bottom, #3A3A3C, #2C2C2E);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease;
+}
+
+.modal-buttons button:hover {
+  background: #48484A;
+}
+
+/* список смен */
+.shift-entry {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #222;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.shift-entry button {
+    margin-left: 10px;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.shift-entry .edit-btn {
+    background: #007aff;
+    color: white;
+}
+
+.shift-entry .delete-btn {
+    background: red;
+    color: white;
+}
+/* подсветка смен */
+.shift-day {
+    background-color: #00E5FF;
+    color: black;
+    font-weight: bold;
+}
+.shift-night {
+    background-color: #B388FF;
+    color: white;
+    font-weight: bold;
+}
+/* .shift-day {
+    background-color: #00e1ff;
+    color: black;
+    font-weight: bold;
+}
+
+.shift-night {
+    background-color: #c17dff;
+    color: white;
+    font-weight: bold;
+}
+ */
+#shiftTypeSelect.shift-day {
+  border: 2px solid #00e5ff;
+  background-color: rgba(0, 229, 255, 0.08);
+  color: #00e5ff;
+}
+
+#shiftTypeSelect.shift-night {
+  border: 2px solid #b388ff;
+  background-color: rgba(179, 136, 255, 0.08);
+  color: #b388ff;
+}
+/* счетчик смен */
+.monthly-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.monthly-stats {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  margin-top: 10px;
+}
+/*.sidebar.active ~ .monthly-stats {
+  transform: translateX(calc(-178% + 120px)); /* сместить счётчик вправо при открытом меню 
+}*/
+
+input, select {
+    background: #2C2C2E;
+    color: #fff;
+    border: 1px solid #3A3A3C;
+    padding: 10px;
+    border-radius: 10px;
+}
+/* хуй там пел */
+#scheduleImportModal .modal-content {
+  width: 90%;
+  max-width: 400px;
+  margin: auto;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+#scheduleImportModal h2 {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+#scheduleImportModal input[type="file"],
+#scheduleImportModal select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: white;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+#scheduleImportModal button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  background: white;
+  color: #000;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: fit-content;       /* Автоширина по содержимому */
+  align-self: center;       /* Центрирует внутри flex-контейнера */
+}
+
+#scheduleImportModal button:hover {
+  background: #e2e2e2;
+}
+
+#scheduleImportModal .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 22px;
+  color: white;
+  cursor: pointer;
+}
+
+/* архив смен */
+.archive-content {
+  width: 90%;
+  max-width: 420px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+#archiveShiftList {
+  max-height: 250px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+/* погода */
+
+
+.weather-widget {
+  margin-bottom: 70px; 
+  position: relative;
+  top: -20px; /* Поднимаем виджет выше */
+  margin-top: 10px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  text-align: center;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  font-size: 14px;
+margin-bottom: 10px;
+}
+
+.weather-temp {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.weather-desc {
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.weather-city {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+/* поиск */
+.search-shift-box {
+  display: flex;
+  align-items: center;
+  background-color: #2c2c2e;
+  border-radius: 16px;
+  padding: 8px 14px;
+  width: 90%;
+  max-width: 300px;
+  margin: 10px auto;
+  box-sizing: border-box;
+  height: 40px;              /* фиксируем высоту */
+  position: relative;
+  top: -10px; /* Смещаем блок ниже */
+}
+
+.search-shift-box i {
+  color: #ccc;
+  font-size: 18px;
+  margin-right: 10px;
+  line-height: 1;           /* убираем лишние отступы */
+}
+
+.search-shift-box input {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  flex: 1;
+  outline: none;
+  height: 100%;             /* делаем как контейнер */
+  line-height: 1;           /* не даём растягиваться */
+}
+
+.search-result-box {
+  margin: 6px 16px;
+  font-size: 14px;
+  color: white;
+  position: relative;
+  top: -10px; /* Смещаем ниже */
+}
