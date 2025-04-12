@@ -87,32 +87,41 @@ const type = shiftType.value;
     const dateStr = shiftDate.value.split("-").reverse().join(".");
     const key = `shift-${shiftDate.value}`;
     const editingKey = shiftModal.dataset.editingKey;
+//🤝
 
     let shifts = JSON.parse(localStorage.getItem("shifts") || "[]");
-    
-    if (editingKey) {
-        shifts = shifts.filter(shift => shift.id !== Number(editingKey));
-        delete shiftModal.dataset.editingKey;
-    }
 
-    const newShift = {
-        id: Date.now(),
-        name: type === "day" ? "День" : "Ночь",
-        date: shiftDate.value,
-        startTime: time,
-        shiftType: type,
-        remindBefore: 30,
-        isDone: false
-    };
+// Удаляем смену по дате (всегда), чтобы не дублировалась
+shifts = shifts.filter(shift => {
+  const d1 = new Date(shift.date).toISOString().split('T')[0];
+  const d2 = new Date(shiftDate.value).toISOString().split('T')[0];
+  return d1 !== d2;
+});
 
-    shifts.push(newShift);
-    localStorage.setItem("shifts", JSON.stringify(shifts));
-    localStorage.setItem(key, JSON.stringify({
-        type,
-        date: dateStr,
-        time
-    }));
+if (editingKey) {
+    delete shiftModal.dataset.editingKey;
+}
 
+const newShift = {
+    id: Date.now(),
+    name: type === "day" ? "День" : "Ночь",
+    date: shiftDate.value,
+    startTime: time,
+    shiftType: type,
+    remindBefore: 30,
+    isDone: false
+};
+
+shifts.push(newShift);
+localStorage.setItem("shifts", JSON.stringify(shifts));
+
+localStorage.removeItem(key);
+
+localStorage.setItem(key, JSON.stringify({
+    type,
+    date: dateStr,
+    time
+}));
     shiftModal.style.display = "none";
     log(`Смена сохранена: ${dateStr} — ${type} в ${time}`);
 
