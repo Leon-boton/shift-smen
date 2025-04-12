@@ -9,9 +9,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calcBtn.addEventListener("click", () => {
     salaryModal.style.display = "flex";
-    setTimeout(() => {
-        document.getElementById("salaryRate").focus();
-    }, 300); // ← задержка, чтобы модалка точно отобразилась
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const isStandalone = window.navigator.standalone === true;
+
+    if (isIOS && isStandalone) {
+        const fakeInput = document.createElement("input");
+        fakeInput.style.position = "absolute";
+        fakeInput.style.top = "-1000px";
+        document.body.appendChild(fakeInput);
+        fakeInput.focus();
+        setTimeout(() => {
+            document.getElementById("salaryRate").focus();
+            document.body.removeChild(fakeInput);
+        }, 200);
+    } else {
+        setTimeout(() => {
+            document.getElementById("salaryRate").focus();
+        }, 300);
+    }
 });
 
     closeModal.addEventListener("click", () => {
