@@ -325,6 +325,12 @@ body::before {
   padding: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: background 0.3s ease;
+  
+  position: fixed;
+  top: 100px; /* отступ сверху — подгони под свой дизайн */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
 }
 /*.calendar {
     width: 320px;
