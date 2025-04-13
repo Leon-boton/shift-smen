@@ -275,7 +275,8 @@ function updateMonthStats(month, year) {
 // гамбургер
 const hamburger = document.getElementById("hamburger");
 const sidebar = document.getElementById("sidebar");
-//!!!
+const overlay = document.getElementById("screenOverlay"); // <--- добавили
+
 hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("active");
   sidebar.classList.toggle("active");
@@ -283,9 +284,19 @@ hamburger.addEventListener("click", () => {
   const statsBox = document.getElementById("statsBox");
   if (sidebar.classList.contains("active")) {
     statsBox.style.display = "none";
+    overlay.style.display = "block"; // <--- показать мутный фон
   } else {
     statsBox.style.display = "";
+    overlay.style.display = "none"; // <--- скрыть мутный фон
   }
+});
+
+// Закрытие по нажатию на фон
+overlay.addEventListener("click", () => {
+  sidebar.classList.remove("active");
+  hamburger.classList.remove("active");
+  overlay.style.display = "none";
+  document.getElementById("statsBox").style.display = "";
 });
 
 //след смена
