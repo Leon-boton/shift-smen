@@ -1,3 +1,13 @@
+#screenOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2); /* менее тёмный */
+  backdrop-filter: blur(1px); /* менее мутный */
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 4;
+  display: none;
+  transition: opacity 0.3s ease;
+}
 
 .icon-btn {
   background: transparent;
