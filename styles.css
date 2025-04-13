@@ -231,9 +231,10 @@ display: flex;
 }
 /* след смена */
 .next-shift-widget {
-  position: absolute;
-  bottom: 0; 
+  position: fixed;
+  top: 480px;
   left: 50%;
+  
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(12px);
@@ -325,12 +326,12 @@ body::before {
   padding: 20px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: background 0.3s ease;
-  
-  position: fixed;
+
+position: fixed;
   top: 100px; /* отступ сверху — подгони под свой дизайн */
   left: 50%;
   transform: translateX(-50%);
-  z-index: 100;
+  z-index: 2;
 }
 /*.calendar {
     width: 320px;
@@ -594,7 +595,7 @@ button.save-btn {
     padding: 5px 20px;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     transition: left 0.3s ease;
-    z-index: 5;
+    z-index: 10;
     backdrop-filter: blur(10px);
 }
 .sidebar {
