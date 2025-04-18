@@ -242,7 +242,7 @@ display: flex;
 /* след смена */
 .next-shift-widget {
   position: fixed;
-  top: 400px;
+  top: 600px;
   left: 50%;
   
   transform: translateX(-50%);
