@@ -7,28 +7,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const salaryMonthInput = document.getElementById("salaryMonth");
     const salaryResult = document.getElementById("salaryResult");
 
+//🇦🇲🇦🇲
     calcBtn.addEventListener("click", () => {
     salaryModal.style.display = "flex";
-    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const isStandalone = window.navigator.standalone === true;
-
-    if (isIOS && isStandalone) {
-        const fakeInput = document.createElement("input");
-        fakeInput.style.position = "absolute";
-        fakeInput.style.top = "-1000px";
-        document.body.appendChild(fakeInput);
-        fakeInput.focus();
-        setTimeout(() => {
-            document.getElementById("salaryRate").focus();
-            document.body.removeChild(fakeInput);
-        }, 200);
-    } else {
-        setTimeout(() => {
-            document.getElementById("salaryRate").focus();
-        }, 300);
-    }
+    setTimeout(() => {
+        document.getElementById("salaryRate").focus();
+    }, 300); // ← задержка, чтобы модалка точно отобразилась
 });
-
     closeModal.addEventListener("click", () => {
         salaryModal.style.display = "none";
     });
@@ -49,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!rate || !monthStr) {
             salaryResult.textContent = "Введите ставку и выберите месяц.";
+
             return;
         }
 
@@ -141,5 +127,51 @@ const shifts = allShifts.filter(shift => {
             <hr>
             <p><strong>К выплате: ${net.toFixed(2)}₽</strong></p>
         `;
+localStorage.setItem(`salary_${monthStr}`, gross.toFixed(2));
+calculateVacationPay(monthStr);
     });
 });
+
+// Функция расчёта отпускных
+function calculateVacationPay(monthStr) {
+  const input = prompt("Введите количество дней отпуска:");
+  if (input === null) return; // Нажали "Отмена"
+
+  const daysOfVacation = parseInt(input);
+  if (!daysOfVacation || daysOfVacation <= 0) {
+    alert('Пожалуйста, введите корректное количество дней.');
+    return;
+  }
+
+  const date = new Date(monthStr);
+  let totalSalary = 0;
+
+  for (let i = 0; i < 12; i++) {
+    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+    const salary = parseFloat(localStorage.getItem(`salary_${key}`)) || 0;
+    totalSalary += salary;
+    date.setMonth(date.getMonth() - 1);
+  }
+
+  if (totalSalary === 0) {
+    alert("Нет данных о зарплате за последние 12 месяцев.");
+    return;
+  }
+
+  const avgDaily = totalSalary / (12 * 29.3);
+  const vacationPay = avgDaily * daysOfVacation;
+  const vacationTax = vacationPay * 0.13;
+  const vacationNet = vacationPay - vacationTax;
+
+  const vacationResult = `
+    <hr>
+    <p><strong>Отпускные:</strong></p>
+    <p>Сумма за 12 месяцев: <strong>${totalSalary.toFixed(2)} ₽</strong></p>
+    <p>Среднедневной заработок: <strong>${avgDaily.toFixed(2)} ₽</strong></p>
+    <p>Начислено: <strong>${vacationPay.toFixed(2)} ₽</strong></p>
+    <p>НДФЛ (13%): <strong>-${vacationTax.toFixed(2)} ₽</strong></p>
+    <p><strong>К выплате: ${vacationNet.toFixed(2)} ₽</strong></p>
+  `;
+
+  document.getElementById("salaryResult").innerHTML += vacationResult;
+}
